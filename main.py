@@ -1,7 +1,10 @@
 import shelve
 import random
+import scraper
 
 def AddCityInDb(city):
+    if scraper.CheckCityOrNot(city) == "По вашему запросу ничего не найдено":
+        return 0
     db = shelve.open("dbOfWordsGame")
     firstElem = city[0]
     if firstElem in db.keys():
@@ -13,6 +16,7 @@ def AddCityInDb(city):
         a = [city]
         db[firstElem] = a
     db.close()
+    return 1
 
 def LoadDbInProgramm():
     db = shelve.open("dbOfWordsGame")
@@ -56,7 +60,10 @@ while cityOfPlayer.find("хватит") == -1:
         if CheckCityOfPlayer(cityOfPlayer, chosedCity):
             cityOfPlayer = input()
             continue
-    AddCityInDb(cityOfPlayer)
+    if not AddCityInDb(cityOfPlayer):
+        print("Я не знаю такой город, назови другой")
+        cityOfPlayer = input()
+        continue
     try:
         chosedCity = ChoseCity(cityOfPlayer)
     except Exception:
