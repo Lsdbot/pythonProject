@@ -1,82 +1,20 @@
-import shelve
-import random
-import scraper
+import sys
+import Design
+from PyQt5 import QtWidgets
+import Logic
 
-def AddCityInDb(city):
-    if scraper.CheckCityOrNot(city) == "По вашему запросу ничего не найдено":
-        return 0
-    db = shelve.open("dbOfWordsGame")
-    firstElem = city[0]
-    if firstElem in db.keys():
-        a = db[firstElem]
-        if city not in a:
-            a.append(city)
-            db[firstElem] = a
-    else:
-        a = [city]
-        db[firstElem] = a
-    db.close()
-    return 1
+class Application(QtWidgets.QMainWindow, Design.Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setUpi(self)
+        self.inputLine.returnPressed.connect(self.PressEnter)
 
-def LoadDbInProgramm():
-    db = shelve.open("dbOfWordsGame")
-    return db
+def main():
+    app = QtWidgets.QApplication(sys.argv)
+    windowApp = Application()
 
-def ChoseCity(cityOfPlayer):
-    lastElem = cityOfPlayer[-1].upper()
-    if lastElem in ["ъ", "ь", "ы"]:
-        ChoseCity(cityOfPlayer[0:(len(cityOfPlayer)-1)])
-    else:
-        return random.choice(citiesDb[lastElem])
-def CheckCityOfPlayer(cityOfPlayer, chosedCity):
-    if chosedCity[-1] in ["ъ","ь","ы"]:
-        if cityOfPlayer[0] != chosedCity[-2].upper():
-            print("Твой город не на букву", chosedCity[-1].upper())
-            return 1
-        elif cityOfPlayer in usedCities:
-            print("Этот город уже был")
-            return 1
-        else:
-            return 0
-    else:
-        if cityOfPlayer[0] != chosedCity[-1].upper():
-            print("Твой город не на букву", chosedCity[-1].upper())
-            return 1
-        elif cityOfPlayer in usedCities:
-            print("Этот город уже был")
-            return 1
-        else:
-            return 0
+    windowApp.show()
+    app.exec_()
 
-citiesDb = LoadDbInProgramm()
-usedCities = []
-chosedCity = ""
-
-print("Я даю тебе фору, начинай")
-
-cityOfPlayer = input()
-while cityOfPlayer != "":
-    if chosedCity:
-        if CheckCityOfPlayer(cityOfPlayer, chosedCity):
-            cityOfPlayer = input()
-            continue
-    if cityOfPlayer not in citiesDb:
-        if not AddCityInDb(cityOfPlayer):
-            print("Кажется, такого города не существует, назови другой")
-            cityOfPlayer = input()
-            continue
-    try:
-        chosedCity = ChoseCity(cityOfPlayer)
-    except Exception:
-        print("Я больше не знаю городов, ты выйграл")
-        break
-    citiesDb[chosedCity[0]].remove(chosedCity)
-    usedCities.extend([chosedCity, cityOfPlayer])
-
-    print(chosedCity)
-    if chosedCity[-1] in ["ь","ъ","ы"]:
-        print("Твой ход, тебе на", chosedCity[-2].upper())
-    else:
-        print("Твой ход, тебе на", chosedCity[-1].upper())
-    cityOfPlayer = input()
-citiesDb.close()
+if __name__ == '__main__':
+    print(Logic.ShowMessage("Москва"))
