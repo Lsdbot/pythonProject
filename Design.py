@@ -81,17 +81,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.labelTitle.setText(_translate("MainWindow", "Что-то вроде игры в города..."))
-        self.inputLine.setText(_translate("MainWindow", "Привет"))
         self.inputButton.setText(_translate("MainWindow", "Ввод"))
         self.helpButton.setText(_translate("MainWindow", "Подсказка"))
-        self.labelProgramme.setText(_translate("MainWindow", "Москва"))
+        self.labelProgramme.setText(_translate("MainWindow", "Я даю тебе фору,начинай!"))
 
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
